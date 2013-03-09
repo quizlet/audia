@@ -8,12 +8,12 @@ Audia reimplements and extends the [HTML5 Audio][1] object using the [Web Audio 
 * Fails gracefully
 * Consistent API with HTML5 Audio which you probably already know
 * Fixes bugs in some Audio implementations
-
+* Works reliably in iOS 6.
 * Implementation of `Audio` is weak across the board. Even in the best browers
 * this is future-proof. you get Audio which is the best you can get for now, then later down the road you get web audio api
-* and seriously, you'll need a wrapper for WAI anyway
+* and seriously, you'll need a wrapper for Web Audio anyway
 
-A complete write-up on this project can be found on the [Lost Decade Games blog][2].
+A complete write-up on this project can be found on the [Lost Decade Games blog][3].
 
 ## API Documentation
 
@@ -33,10 +33,6 @@ TODO: Provide thin wrappers around the base code.
 
 Audia also has the below API. If any of the below functionality is not supported by the client, Audia will fail silently.
 
-### Audia instances
-
-Example: `var sound = new Audia();`
-
 #### Properties
 
 Each Audia instance has the following properties:
@@ -46,7 +42,8 @@ Each Audia instance has the following properties:
 * **loop**: `Boolean` If set to true, the audio will play again when it reaches the end of playback. (default: `false`)
 * **muted**: `Boolean` True if the sound has been muted, otherwise false.
 * **paused**: `Boolean` True if the sound is paused, false if it's playing. (Read-only)
-* **src**: `String` The URL of a sound file to load.
+* **autoplay**: `Boolean` Set to true to play when the file is ready (default: `false`)
+* **src**: `String` The URL of a sound file to load. Setting the `src` causes the file to start loading.
 * **volume**: `Number` The volume of the playback where `0` is muted and `1` is normal volume. (arbitrary maximum = `10`), (default: `1`)
 * **onended**: `Function` Gets called when playback reaches the end of the buffer.
 * **onload**: `Function` Gets called when a sound file (requested by setting `src`) is done loading.
@@ -62,19 +59,28 @@ _* The italicized properties are only available if the client supports Web Audio
 * **mute**: Silences playback of the sound buffer.
 * **unmute**: Restores audible playback of the sound buffer.
 
+#### Fetching sounds
+
+Files are loaded from a server as soon as an `src` property is set. Files are loaded with XMLHttpRequest. If you are requesting files from a remote server on a different domain (e.g. a CDN), that domain must allow [Cross-Origin Resource Sharing][4]. Quick tip: if the data on that external domain is public, you can set `Access-Control-Allow-Origin: *`.
+
 ## Examples
 
-### Create a sound object and play an mp3
+### Play a sound when it loads
 
 ```javascript
-var sound = new Audia();
-sound.src = "onslaught.mp3";
-sound.play();
+sound = new Audia();
+sound.oncanplay = function () {
+	sound.play();
+	doSomethingWithUI();
+};
+sound.src = "new_song.mp3";
 ```
+
 ### Create sounds with some sugar
 
 ```javascript
 var backgroundMusic = new Audia("joshua_morse.mp3");
+
 var battleMusic = new Audia({
 	src: "a_recurring_conflict.mp3",
 	loop: true
@@ -101,15 +107,7 @@ if (sound.playing) {
 }
 ```
 
-### Play it when it loads
-
-```javascript
-sound.onload = function () {
-	doSomething();
-};
-sound.src = "new_song.mp3";
-```
-
 [1]: http://www.whatwg.org/specs/web-apps/current-work/#the-audio-element
 [2]: https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
 [3]: http://www.lostdecadegames.com/audia-is-a-library-for-simplifying-the-web-audio-api/
+[4]: https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS
