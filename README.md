@@ -1,12 +1,11 @@
 # Audia
 
-Audia reimplements and extends the [HTML5 Audio][1] object using the [Web Audio API][2].
+Audia reimplements the [HTML5 Audio][1] object using the [Web Audio API][2], and adds some additional sugar to it.
 
 ## Benefits
 
 * Future-proof
-* Fails gracefully
-* Consistent API with HTML5 Audio which you probably already know
+* Consistent API with HTML5 Audio
 * Fixes bugs in some Audio implementations
 * Works reliably in iOS 6.
 * Implementation of `Audio` is weak across the board. Even in the best browers
@@ -19,19 +18,11 @@ A complete write-up on this project can be found on the [Lost Decade Games blog]
 
 Everything is identical to the HTML5 Audio spec. Anything not working as it should? File an issue! :)
 
-In fact in many cases Audia is BETTER than the browser's native Audio implementation, even if it doesn't also support Web Audio API.
-
 ### Global Audia object
-
-TODO: Provide thin wrappers around the base code.
 * Audia (global object)
 
-* **version**: `String` The version of Audia being run. (Example: `"0.1.0"`)
-* **canPlayType**: you can pass in mp3, ogg (helpers since normally it wants audio/ogg audio/mp3)
-
-## Gimme some sugar baby
-
-Audia also has the below API. If any of the below functionality is not supported by the client, Audia will fail silently.
+* **Audia.version**: `String` The version of Audia being run. (Example: `"0.1.0"`)
+* **Audia.canPlayType**: you can pass in mp3, ogg (helpers since normally it wants audio/ogg audio/mp3)
 
 #### Properties
 
@@ -69,25 +60,14 @@ Files are loaded from a server as soon as an `src` property is set. Files are lo
 
 ```javascript
 sound = new Audia();
-sound.oncanplay = function () {
+sound.oncanplay = function() {
 	sound.play();
 	doSomethingWithUI();
 };
 sound.src = "new_song.mp3";
 ```
 
-### Create sounds with some sugar
-
-```javascript
-var backgroundMusic = new Audia("joshua_morse.mp3");
-
-var battleMusic = new Audia({
-	src: "a_recurring_conflict.mp3",
-	loop: true
-});
-```
-
-### Move the playback pointer to 30 seconds into the sound buffer
+### Move the playback pointer to 30 seconds (not milliseconds) into the sound buffer
 
 ```javascript
 sound.currentTime = 30;
@@ -99,7 +79,7 @@ sound.currentTime = 30;
 var percentage = (sound.currentTime / sound.duration) * 100;
 ```
 
-### Stop it if it's playing
+### Stop sound if it's playing
 
 ```javascript
 if (sound.playing) {
