@@ -6,9 +6,9 @@ var Audia = (function () {
 
 	// Got Web Audio API?
 	var audioContext = null;
-	if (typeof AudioContext == "function") {
+	if (typeof AudioContext !== "undefined") {
 		audioContext = new AudioContext();
-	} else if (typeof webkitAudioContext == "function") {
+	} else if (typeof webkitAudioContext !== "undefined") {
 		audioContext = new webkitAudioContext();
 	}
 
