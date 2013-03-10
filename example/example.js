@@ -1,62 +1,7 @@
-//(function () {
+console.log('Using ' + (Audia.hasWebAudio ? 'WAI' : 'audio wrapper'));
 
-	/*
-  /////////////////////////////////////////////////////////////////////////////
-	// Setup audio context
-	var audioContext = new webkitAudioContext();
-
-	// Create a gain node
-	var gainNode = audioContext.createGainNode();
-	gainNode.gain.value = 1;
-	gainNode.connect(audioContext.destination);
-
-	// Create the buffer source
-	var bufferCache;
-	var bufferSource = audioContext.createBufferSource();
-	bufferSource.connect(gainNode);
-
-	// Fetch the audio data
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "audio/shop.mp3", true);
-	xhr.responseType = "arraybuffer";
-	xhr.onload = function () {
-		// Decode the response
-		audioContext.decodeAudioData(xhr.response, function (buffer) {
-			// Cache the buffer
-			bufferCache = buffer;
-
-			// Attach buffer to source
-			bufferSource.buffer = buffer;
-
-			// Connect buffer source to gain
-			bufferSource.connect(gainNode);
-		});
-	};
-	xhr.send();
-
-  // Play
-  var playShop = document.getElementById("play-shop");
-  playShop.addEventListener("click", function () {
-		bufferSource.noteOn(0);
-  }, false);
-
-  var stopShop = document.getElementById("stop-shop");
-  stopShop.addEventListener("click", function () {
-		bufferSource.noteOff(0);
-
-		// Refresh it
-		bufferSource = audioContext.createBufferSource();
-		bufferSource.buffer = bufferCache;
-		bufferSource.connect(gainNode);
-  }, false);
-  /////////////////////////////////////////////////////////////////////////////
-  */
-
-	console.log('Using ' + (Audia.hasWebAudio ? 'WAI' : 'audio wrapper'));
-
-  // Attack sound…
-
-	console.log("attackSound: loading…");
+// Attack sound...
+console.log("attackSound: loading...");
 
   // Play button
   var playAttack = document.getElementById("play-attack");
@@ -92,7 +37,7 @@
     attackSound.volume = volumeAttack.value;
   }, false);
 
-  // Shop music…
+  // Shop music...
 
   var shopMusic = new Audia("audio/shop.mp3");
   shopMusic.loop = true;
