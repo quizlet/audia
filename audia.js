@@ -31,11 +31,11 @@ var Audia = (function () {
 		return Math.min(Math.max(Number(value), min), max);
 	};
 
-	// Which approach are we taking?…
+	// Which approach are we taking?...
 
 	if (hasWebAudio) {
 
-		// Reimplement Audio using Web Audio API…
+		// Reimplement Audio using Web Audio API...
 
 		// Load audio helper
 		var buffersCache = {};
@@ -51,7 +51,9 @@ var Audia = (function () {
 				object.dispatchEvent("canplaythrough"/*, TODO*/);
 				object.dispatchEvent("load"/*, TODO*/);
 
-				object._autoplay && object.play();
+				if (object._autoplay) {
+					object.play();
+				}
 			};
 
 			// Got a cached buffer or should we fetch it?
@@ -129,7 +131,7 @@ var Audia = (function () {
 			}
 		};
 
-		// Methods…
+		// Methods...
 
 		// load
 		Audia.prototype.load = function () {
@@ -201,7 +203,7 @@ var Audia = (function () {
 			}
 		};
 
-		// Properties…
+		// Properties...
 
 		// autoplay (Boolean)
 		Object.defineProperty(Audia.prototype, "autoplay", {
@@ -348,7 +350,7 @@ var Audia = (function () {
 
 	} else {
 
-		// Create a thin wrapper around the Audio object…
+		// Create a thin wrapper around the Audio object...
 
 		// Constructor
 		Audia = function (src) {
@@ -361,7 +363,7 @@ var Audia = (function () {
 			}
 		};
 
-		// Methods…
+		// Methods...
 
 		// load
 		Audia.prototype.load = function (type) {
@@ -397,7 +399,7 @@ var Audia = (function () {
 			this._audioNode.removeEventListener(eventName, callback, capture);
 		};
 
-		// Properties…
+		// Properties...
 
 		// autoplay (Boolean)
 		Object.defineProperty(Audia.prototype, "autoplay", {
@@ -510,7 +512,7 @@ var Audia = (function () {
 			get: function () { return this._audioNode.volume; },
 			set: function (value) {
 				if (Audia.preventErrors) {
-					var value = clamp(value, 0, 1);
+					value = clamp(value, 0, 1);
 				}
 				this._audioNode.volume = value;
 			}
@@ -548,7 +550,7 @@ var Audia = (function () {
 		if (audioNode === undefined) {
 			audioNode = new Audio();
 		}
-		var type = (type.match("/") === null ? "audio/" : "") + type;
+		type = (type.match("/") === null ? "audio/" : "") + type;
 		return audioNode.canPlayType(type);
 	};
 
