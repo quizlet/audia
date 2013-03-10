@@ -38,7 +38,7 @@ var Audia = (function () {
 		// Reimplement Audio using Web Audio API...
 
 		// Load audio helper
-		var buffersCache = {};
+		var loadedBuffers = {};
 		var loadAudioFile = function (object, url) {
 			var onLoad = function (buffer) {
 				// Duration
@@ -57,15 +57,15 @@ var Audia = (function () {
 			};
 
 			// Got a cached buffer or should we fetch it?
-			if (url in buffersCache) {
-				onLoad(buffersCache[url]);
+			if (url in loadedBuffers) {
+				onLoad(loadedBuffers[url]);
 			} else {
 				var xhr = new XMLHttpRequest();
 				xhr.open("GET", url, true);
 				xhr.responseType = "arraybuffer";
 				xhr.onload = function () {
 					audioContext.decodeAudioData(xhr.response, function (buffer) {
-						buffersCache[url] = buffer;
+						loadedBuffers[url] = buffer;
 						onLoad(buffer);
 					});
 				};
@@ -78,7 +78,7 @@ var Audia = (function () {
 			object.bufferSource = audioContext.createBufferSource();
 
 			// Attach buffer to buffer source
-			object.bufferSource.buffer = buffersCache[object.src];
+			object.bufferSource.buffer = loadedBuffers[object.src];
 
 			// Connect to gain node
 			object.bufferSource.connect(object.gainNode);
@@ -143,10 +143,15 @@ var Audia = (function () {
 		// play()
 		Audia.prototype.play = function () {
 			// TODO: restart from this.currentTime
-			this._paused = false;
+			if (this._src in loadedBuffers) {
+				this._paused = false;
+				refreshBufferSource(this);
+				this.bufferSource.noteOn(0);
+			// file hasn't loaded yet, mark it to play when it's ready
+			} else {
+				this.autoplay = true;
+			}
 
-			refreshBufferSource(this);
-			this.bufferSource.noteOn(0);
 		};
 
 		// pause()
