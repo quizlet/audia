@@ -4,7 +4,6 @@ Audia reimplements the [HTML5 Audio][1] object using the [Web Audio API][2], and
 
 ## Benefits
 
-* Future-proof
 * Consistent API with HTML5 Audio
 * Fixes bugs in some Audio implementations
 * Works reliably in iOS 6.
@@ -77,14 +76,6 @@ sound.currentTime = 30;
 
 ```javascript
 var percentage = (sound.currentTime / sound.duration) * 100;
-```
-
-### Stop sound if it's playing
-
-```javascript
-if (sound.playing) {
-	sound.stop();
-}
 ```
 
 [1]: http://www.whatwg.org/specs/web-apps/current-work/#the-audio-element
